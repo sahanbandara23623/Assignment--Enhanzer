@@ -3,7 +3,7 @@
   "info": {
     "title": "Ticket Booking API",
     "version": "1.0.0",
-    "description": "A RESTful CRUD API for managing ticket bookings QA QA Push 1."
+    "description": "A RESTful CRUD API for managing ticket bookings QA."
   },
   "paths": {
     "/tickets": {
