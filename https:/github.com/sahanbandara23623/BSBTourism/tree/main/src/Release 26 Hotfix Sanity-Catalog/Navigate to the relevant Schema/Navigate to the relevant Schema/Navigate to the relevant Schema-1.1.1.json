@@ -1,0 +1,1509 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenAPI 3.1 Specification for CoffeeShop",
+    "summary": "Sample Coffee Shop Server based on the OpenAPI 3.1 specification.",
+    "description": "This is a sample Coffee Shop Server based on the OpenAPI 3.1 specification. It's the first version and includes several areas, such as 'Menu', 'Order', 'User', 'Inventory', 'Notification', and more. We plan to add more features in the future. Please refer to this sample and help us improve it. If you want to learn more about OpenAPI, you can follow the link to XapiiHub [https://xapihub.io/].",
+    "termsOfService": "http://xapihub.io/terms/",
+    "contact": {
+      "email": "info@xapihub.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "components": {
+    "schemas": {
+      "CreateMenuResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MenuBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UpdateMenuResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MenuBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ViewMenuResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MenuResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ItemResource"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "MenuResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/MenuBaseResource"
+          }
+        ]
+      },
+      "MenuBaseResource": {
+        "type": "object",
+        "description": "test",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "today special"
+          },
+          "description": {
+            "type": "string",
+            "example": "Sample menu"
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "CreateOrderResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderBaseResource"
+          }
+        ]
+      },
+      "UpdateOrderResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderBaseResource"
+          }
+        ]
+      },
+      "ViewOrderResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/OrderResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "OrderResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "itemList": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "menu": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/MenuResource"
+                    },
+                    "item": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ItemResource"
+                    },
+                    "count": {
+                      "type": "integer",
+                      "format": "int64",
+                      "example": 2
+                    },
+                    "notes": {
+                      "type": "string",
+                      "example": "Need to be more spicy"
+                    }
+                  }
+                }
+              },
+              "totalPrice": {
+                "type": "number",
+                "format": "float",
+                "example": "16.50"
+              },
+              "currency": {
+                "type": "string",
+                "format": "iso-4217",
+                "example": "USD"
+              },
+              "user": {
+                "type": "object",
+                "$ref": "#/components/schemas/UserResource"
+              },
+              "notes": {
+                "type": "string",
+                "example": "Need to be more spicy"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "OrderBaseResource": {
+        "type": "object",
+        "required": [
+          "itemList"
+        ],
+        "properties": {
+          "itemList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "menuId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "da8249e2-49ab-4060-bb5e-ca7c66f279ac"
+                },
+                "itemId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                },
+                "count": {
+                  "type": "integer",
+                  "format": "int64",
+                  "example": 2
+                },
+                "notes": {
+                  "type": "string",
+                  "example": "Need to be more spicy"
+                }
+              }
+            }
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "l2b0a7f8-262e-11ee-be56-0242ac120002"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Need to be more spicy"
+          }
+        }
+      },
+      "CreateInventoryItemResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InventoryItemBaseResource"
+          }
+        ]
+      },
+      "UpdateInventoryItemResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InventoryItemBaseResource"
+          }
+        ]
+      },
+      "ViewInventoryItemResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/InventoryItemResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "InventoryItemResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/InventoryItemBaseResource"
+          }
+        ]
+      },
+      "InventoryItemBaseResource": {
+        "type": "object",
+        "properties": {
+          "minQuantity": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ItemBaseResource"
+          }
+        ]
+      },
+      "CreateNotificationResource": {
+        "type": "object",
+        "properties": {
+          "userIdList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "l2b0a7f8-262e-11ee-be56-0242ac120002"
+            }
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NotificationBaseResource"
+          }
+        ]
+      },
+      "UpdateNotificationResource": {
+        "type": "object",
+        "properties": {
+          "userIdList": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "example": "l2b0a7f8-262e-11ee-be56-0242ac120002"
+            }
+          }
+        },
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NotificationBaseResource"
+          }
+        ]
+      },
+      "ViewNotificationResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/NotificationResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "NotificationResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/NotificationBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "users": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "NotificationBaseResource": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Your order is ready"
+          },
+          "effectFrom": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023/04/18"
+          },
+          "effectiveDates": {
+            "type": "integer",
+            "format": "int64",
+            "example": 5
+          }
+        }
+      },
+      "CreateUserResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "password": {
+                "type": "string",
+                "description": "This is the user’s password. The password must be relevant to the configuration",
+                "example": "password"
+              }
+            }
+          }
+        ]
+      },
+      "UpdateUserResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "password": {
+                "type": "string",
+                "description": "This is the user’s password. The password must be relevant to the configuration",
+                "example": "password"
+              }
+            }
+          }
+        ]
+      },
+      "ViewUserResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "UserResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/UserBaseResource"
+          }
+        ]
+      },
+      "UserBaseResource": {
+        "type": "object",
+        "required": [
+          "username",
+          "email",
+          "phoneNumber"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "This is the user’s preferred unique user name",
+            "example": "AlexJ"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alex"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Jone"
+          },
+          "email": {
+            "type": "string",
+            "description": "This is the user’s email ID",
+            "example": "alexj@email.com"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "phone number in E.164 format. Should be a unique phone number",
+            "example": "+168954762"
+          },
+          "status": {
+            "type": "string",
+            "description": "Whether the user is currently active",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          }
+        },
+        "xml": {
+          "name": "user"
+        }
+      },
+      "CreateStoreResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StoreBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "menuIdList": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "da8249e2-49ab-4060-bb5e-ca7c66f279ac"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "UpdateStoreResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StoreBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "menuIdList": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "example": "da8249e2-49ab-4060-bb5e-ca7c66f279ac"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ViewStoreResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/StoreResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "StoreResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/StoreBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "menus": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/MenuResource"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "StoreBaseResource": {
+        "required": [
+          "name",
+          "location",
+          "openHours"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "coffee shop name",
+            "example": "The Family Bean"
+          },
+          "address": {
+            "type": "object",
+            "$ref": "#/components/schemas/AddressResource",
+            "description": "Coffee shop address"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location url from a map api"
+          },
+          "openHours": {
+            "type": "string",
+            "description": "shop open hours",
+            "example": "open-close 10.30pm"
+          }
+        }
+      },
+      "CreateLoyaltyProgramResource": {
+        "type": "object",
+        "required": [
+          "summary",
+          "accrualRuleId"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyProgramBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "accrualRuleId": {
+                "type": "string",
+                "format": "uuid",
+                "example": "e2b0a7f8-262e-11ee-be56-0242ac120002"
+              }
+            }
+          }
+        ]
+      },
+      "UpdateLoyaltyProgramResource": {
+        "type": "object",
+        "required": [
+          "summary",
+          "accrualRuleId"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyProgramBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "accrualRuleId": {
+                "type": "string",
+                "format": "uuid",
+                "example": "e2b0a7f8-262e-11ee-be56-0242ac120002"
+              }
+            }
+          }
+        ]
+      },
+      "ViewLoyaltyProgramResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyProgramResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "LoyaltyProgramResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/LoyaltyProgramBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "accrualRule": {
+                "type": "object",
+                "$ref": "#/components/schemas/AccrualRuleResource"
+              }
+            }
+          }
+        ]
+      },
+      "LoyaltyProgramBaseResource": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "description": "Summary about the loyalty program",
+            "example": "This is star point loyalty program"
+          },
+          "status": {
+            "type": "string",
+            "description": "Whether the program currently active",
+            "example": "ACTIVE",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "expirationDuration": {
+            "type": "string",
+            "description": "The number of months before points expire. Example for 10 days, 10 hours, 30 minutes, and 30 seconds:P20DT10H30M30S",
+            "example": "P20DT10H30M30S"
+          }
+        }
+      },
+      "CreateLoyaltyAccountResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyAccountBaseResource"
+          }
+        ]
+      },
+      "UpdateLoyaltyAccountResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyAccountBaseResource"
+          }
+        ]
+      },
+      "ViewLoyaltyAccountResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/LoyaltyAccountResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "LoyaltyAccountResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/LoyaltyAccountBaseResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "program": {
+                "type": "object",
+                "$ref": "#/components/schemas/LoyaltyProgramResource"
+              }
+            }
+          }
+        ]
+      },
+      "LoyaltyAccountBaseResource": {
+        "type": "object",
+        "required": [
+          "phoneNumber"
+        ],
+        "properties": {
+          "phoneNumber": {
+            "type": "string",
+            "description": "Buyer phone number in E.164 format. The phone number should be unique.",
+            "example": "+168954762"
+          },
+          "balance": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Number of earn points",
+            "example": 0
+          }
+        }
+      },
+      "CreateRatingResource": {
+        "type": "object",
+        "required": [
+          "menuId",
+          "itemId",
+          "rating"
+        ],
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "menuId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Menu Id",
+                "example": "da8249e2-49ab-4060-bb5e-ca7c66f279ac"
+              },
+              "itemId": {
+                "type": "string",
+                "format": "uuid",
+                "description": "Item ID",
+                "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/RatingBaseResource"
+          }
+        ]
+      },
+      "ViewRatingResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RatingResource"
+          },
+          {
+            "$ref": "#/components/schemas/AuditResource"
+          }
+        ]
+      },
+      "RatingResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "menu": {
+                "type": "object",
+                "$ref": "#/components/schemas/MenuResource"
+              },
+              "item": {
+                "type": "object",
+                "$ref": "#/components/schemas/ItemResource"
+              },
+              "user": {
+                "type": "object",
+                "$ref": "#/components/schemas/UserResource"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/RatingBaseResource"
+          }
+        ]
+      },
+      "RatingBaseResource": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Rating for an item 0 - 5",
+            "example": 4
+          },
+          "comments": {
+            "type": "string",
+            "description": "User can give a comments",
+            "example": "Delicious food item"
+          }
+        }
+      },
+      "ItemResource": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "$ref": "#/components/schemas/ItemBaseResource"
+          }
+        ]
+      },
+      "ItemBaseResource": {
+        "required": [
+          "name",
+          "quantity"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Chicken Burger"
+          },
+          "image": {
+            "type": "string",
+            "example": "../images/chicken-burger.png"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "float",
+            "example": 3.5
+          },
+          "currency": {
+            "type": "string",
+            "format": "iso-4217",
+            "example": "USD"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int64",
+            "example": 10
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "example": true
+          },
+          "notes": {
+            "type": "string",
+            "example": "With Cheese"
+          }
+        }
+      },
+      "AddressResource": {
+        "type": "object",
+        "properties": {
+          "street": {
+            "type": "string",
+            "example": "437 Lytton"
+          },
+          "city": {
+            "type": "string",
+            "example": "Palo Alto"
+          },
+          "state": {
+            "type": "string",
+            "example": "CA"
+          },
+          "zip": {
+            "type": "string",
+            "example": "94301"
+          }
+        },
+        "xml": {
+          "name": "address"
+        }
+      },
+      "AccrualRuleResource": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/IdentifierResource"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "accrualType": {
+                "type": "string",
+                "description": "The type of accrual rule that defines how buyers earn point",
+                "enum": [
+                  "SPEND",
+                  "VISIT"
+                ]
+              },
+              "pointCount": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Number of point the buyers can earn",
+                "example": 1
+              },
+              "pointRate": {
+                "type": "string",
+                "description": "How much money which need to be spent to get one point",
+                "example": "100"
+              },
+              "currencyType": {
+                "type": "string",
+                "description": "Currency type",
+                "example": "USD"
+              }
+            }
+          }
+        ]
+      },
+      "SalesInformationResource": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "The requested date",
+            "example": "2023/04/25"
+          },
+          "ordersByMenu": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderCountPerMenuResource"
+            }
+          },
+          "ordersByItem": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderCountPerItemResource"
+            }
+          }
+        }
+      },
+      "OrderCountPerMenuResource": {
+        "type": "object",
+        "properties": {
+          "menu": {
+            "type": "object",
+            "$ref": "#/components/schemas/MenuResource"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of ordered from the menu",
+            "example": 5
+          }
+        }
+      },
+      "OrderCountPerItemResource": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "$ref": "#/components/schemas/ItemResource"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of ordered from the menu",
+            "example": 10
+          }
+        }
+      },
+      "IdentifierResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "189e6756-1a68-11ee-be56-0242ac120002"
+          }
+        }
+      },
+      "AuditResource": {
+        "type": "object",
+        "properties": {
+          "createdBy": {
+            "type": "string",
+            "example": "john"
+          },
+          "createdTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-30"
+          },
+          "updatedBy": {
+            "type": "string",
+            "example": "john"
+          },
+          "updatedTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-04-30"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "fieldErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FieldError"
+            }
+          },
+          "globalErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GlobalError"
+            }
+          }
+        }
+      },
+      "FieldError": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string",
+            "description": "This is the error field",
+            "example": "price"
+          },
+          "rejectedValue": {
+            "type": "string",
+            "description": "This is the rejected value belong to error field",
+            "example": "5.0.2"
+          },
+          "userMessage": {
+            "type": "string",
+            "description": "Describe the error message",
+            "example": "Invalid input for price field"
+          }
+        }
+      },
+      "GlobalError": {
+        "type": "object",
+        "properties": {
+          "userMessage": {
+            "type": "string",
+            "description": "Describe the error message",
+            "example": "Maximum value exceeded"
+          }
+        }
+      }
+    },
+    "pathItems": {
+      "addNotifications": {
+        "summary": "new pathItems sum",
+        "description": "new pathItems des",
+        "post": {
+          "tags": [
+            "notification"
+          ],
+          "summary": "Creates a new notification",
+          "description": "Creates a new notification",
+          "operationId": "addNotification",
+          "requestBody": {
+            "description": "Creates a new notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateNotificationResource"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateNotificationResource"
+                }
+              },
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateNotificationResource"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "created",
+              "headers": {
+                "location": {
+                  "description": "URL of created resource",
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "401": {
+              "description": "Unauthorized (authentication not done)",
+              "x-not-implemented": true,
+              "content": {}
+            },
+            "403": {
+              "description": "Forbidden (no access rights to this api)",
+              "x-not-implemented": true,
+              "content": {}
+            },
+            "422": {
+              "description": "Un-processable Entity (request well-formed but has business errors, check error section.)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "get": {
+          "tags": [
+            "notification"
+          ],
+          "summary": "Get all notifications",
+          "description": "Get all notifications",
+          "operationId": "getAllNotification",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ViewNotificationResource"
+                    }
+                  }
+                },
+                "application/xml": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/ViewNotificationResource"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized (authentication not done)",
+              "x-not-implemented": true,
+              "content": {}
+            },
+            "403": {
+              "description": "Forbidden (no access rights to this api)",
+              "x-not-implemented": true,
+              "content": {}
+            },
+            "422": {
+              "description": "Un-processable Entity (request well-formed but has business errors, check error section.)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "re1": {
+        "description": "Create a new menu",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "today special"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Sample menu"
+                    },
+                    "isAvailable": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          }
+        },
+        "required": true
+      },
+      "re2": {
+        "description": "Create a new menu",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          },
+          "application/x-www-form-urlencoded": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          }
+        },
+        "required": true
+      },
+      "re3": {
+        "description": "Create a new menu",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/MenuBaseResource"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "res1": {
+        "description": "Create a new menu",
+        "content": {
+          "application/xml": {
+            "schema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "today special"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Sample menu"
+                    },
+                    "isAvailable": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "res2": {
+        "description": "Create a new menu",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          }
+        }
+      },
+      "res3": {
+        "description": "Create a new menu",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/MenuBaseResource"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "e2b0a51e-262e-11ee-be56-0242ac120002"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateMenuResource"
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "location": {
+        "description": "URL of created resource",
+        "schema": {
+          "type": "object"
+        }
+      }
+    },
+    "parameters": {
+      "NM": {
+        "name": "name",
+        "in": "query",
+        "description": "Name of the menu",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "examples": {
+      "User1": {
+        "summary": "user 1 examaple",
+        "description": "user 1 description",
+        "value": {
+          "username": "AbcJ",
+          "firstName": "Abc",
+          "lastName": "J",
+          "email": "abcj@email.com",
+          "phoneNumber": "+4536272",
+          "status": "NEW",
+          "password": "Abc@1234"
+        }
+      }
+    },
+    "links": {
+      "getStore": {
+        "operationId": "getUserByName",
+        "parameters": {
+          "username": "$response.body#/id"
+        },
+        "server": {
+          "url": "https://api-qa.xapihub.io/coffeeshop/v1",
+          "description": "Coffeeshop Server"
+        },
+        "requestBody": "$response.body#/name",
+        "description": "The `id` value returned in the response can be used as the `userId` parameter in `GET /users/{userId}`."
+      }
+    },
+    "callbacks": {
+      "myEvent": {
+        "{$request.body#/callbackUrl}": {
+          "post": {
+            "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Some event happened"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ]
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Your server returns this code if it accepts the callback"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
